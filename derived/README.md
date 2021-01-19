@@ -1,7 +1,7 @@
 # Vulgate Glaire - derived folders
 * David Haslam (text/module developer) - 19 January 2021
 ## USFM
-This folder contains 73 **USFM** files converted from TEI XML.
+This folder contains 73 **USFM** files converted from TEI XML by means of a bespoke TextPipe filter.
 * These were systematically renamed using a simple *ad hoc* Windows CMD file.
 ## OSIS
 This folder contains two **OSIS** XML files:
