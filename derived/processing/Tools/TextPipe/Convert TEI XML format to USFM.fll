@@ -1,0 +1,244 @@
+﻿{
+  "formatName": "TextPipe_FLL",
+  "formatVersion": "1.0",
+  "trialInput": "You can type sample text in \r\nthe Trial Run Input Area to\r\ntest if your filter is working \r\nproperly. Click the [Trial Run]\r\nbutton below to start the test.\r\n\r\nYou can also perform Partial Trial \r\nRuns by right-clicking on filters\r\nin the Filter list.\r\n\r\nTo clear this text, just right \r\nclick it and select 'Clear Entire \r\nField' from the menu. Most \r\nof TextPipe's fields have \r\nsimilar helpful menus.\r\n",
+  "Logging": {
+    "expanded": true,
+    "enabled": false,
+    "filename": ".\\textpipe.log",
+    "append": false,
+    "threshold": 20000,
+    "commentFilters": true
+  },
+  "Files": [
+    {
+      "filename": "V:\\VulgateGlaire-master\\books\\*.xml",
+      "subfolder": "None",
+      "action": "Include"
+    }
+  ],
+  "Filters": {
+    "Input": {
+      "binaryFiles": 2,
+      "inputFromFiles": 1,
+      "insideCompressed": false
+    },
+    "Comment": {
+      "expanded": true,
+      "value": "Convert TEI XML format to USFM\r\n\r\nDesigned for processing each of the books in VulgateGlaire\r\n\r\nDownloaded from https:\/\/github.com\/MarjorieBurghart\/VulgateGlaire\r\n\r\nHer text was obtained from http:\/\/jesusmarie.free.fr\/bible_vigouroux.html\r\n\r\nAssumes: subst V: <download_path>\r\n\r\nAnalysis:\r\n - Character frequency analysis on merged.usfm\r\n\r\nErratum: (+ reported upstream)\r\n - Remove space before a comma\r\n\r\nDone separately:\r\n + Rename each file with a 2 digit prefix & USFM book ID\r\n + Add markers: \\id \\ide \\rem \\h \\toc1 \\toc2 \\toc3 \\mt1 \\mt2\r\n \r\nTBD: (Were these done later?)\r\n + Use footnote markers for parenthesised notes\r\n + Use \\d and \\qa where applicable instead of \\it_...\\it*\r\n + Mark the 22 acrostic Hebrew letter names in Psalm 118.\r\n + Locate and fix the 9 unpaired parentheses \r\n + 20 instances of \\x{2019}\\x20 [remove the space]\r\n   Only where the next letter is a vowel.\r\n\r\n",
+      "SubFilters": {
+        "Comment": {
+          "value": "Revision History:\r\n\r\n2017-10-10 Filter developed and used successfully\r\n2021-01-18 Filter saved in new JSON readable text format"
+        },
+        "Comment": {
+          "value": "Tidy 1",
+          "SubFilters": {
+            "EOL": {
+              "convertFrom": 3,
+              "convertTo": 2,
+              "fixedLineLength": 80,
+              "removeExtraneous": false,
+              "convertToText": ""
+            },
+            "Simple": {
+              "filterType": 10
+            },
+            "Simple": {
+              "filterType": 12
+            }
+          }
+        },
+        "Comment": {
+          "value": "Convert",
+          "SubFilters": {
+            "Comment": {
+              "expanded": true,
+              "value": "ID",
+              "SubFilters": {
+                "Search": {
+                  "search": "<div xmlns=\"http:\/\/www.tei-c.org\/ns\/1.0\" type=\"book\" xml:",
+                  "replace": "",
+                  "ignoreCase": false,
+                  "patternType": 0,
+                  "greedy": false,
+                  "dotMatchesNewLines": true,
+                  "utf8support": true
+                }
+              }
+            },
+            "Comment": {
+              "expanded": true,
+              "value": "Verses",
+              "SubFilters": {
+                "Search": {
+                  "expanded": true,
+                  "search": "<ab .+<\/ab>",
+                  "replace": "",
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "replaceType": 2,
+                  "greedy": false,
+                  "dotMatchesNewLines": true,
+                  "utf8support": true,
+                  "SubFilters": {
+                    "SearchList": {
+                      "useFile": false,
+                      "simultaneous": false,
+                      "onlyLogOnReplace": true,
+                      "ignoreCase": false,
+                      "patternType": 1,
+                      "greedy": false,
+                      "dotMatchesNewLines": true,
+                      "utf8support": true,
+                      "items": [
+                        ["\\r\\n", "\\x20"],
+                        ["<ab n=\"", "\\\\v\\x20"],
+                        ["<\/ab>", ""]
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "Comment": {
+              "expanded": true,
+              "value": "Other",
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "greedy": false,
+                  "dotMatchesNewLines": true,
+                  "utf8support": true,
+                  "items": [
+                    ["id=\"", "\\\\id\\x20"],
+                    ["<div type=\"chapter\" n=\"", "\\\\c\\x20"],
+                    ["<\/div>", ""],
+                    ["(<\/hi>)(\\.)", "$2$$1"],
+                    ["<hi rend=\"italics\">(.+)<\/hi>", "\\\\it $1\\\\it*"],
+                    ["\">", "\\x20"],
+                    ["&#160;", "\\xC2\\xA0"]
+                  ]
+                },
+                "Grep": {
+                  "expanded": true,
+                  "filterType": 0,
+                  "value": "^\\\\id",
+                  "ignoreCase": false,
+                  "patternType": 0,
+                  "utf8support": true,
+                  "ignoreEmpty": false,
+                  "SubFilters": {
+                    "SearchList": {
+                      "useFile": false,
+                      "simultaneous": false,
+                      "onlyLogOnReplace": true,
+                      "ignoreCase": false,
+                      "patternType": 1,
+                      "greedy": true,
+                      "dotMatchesNewLines": false,
+                      "utf8support": true,
+                      "items": [
+                        ["(\\w+)_(\\w+)", "$2_$1"]
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "Comment": {
+              "expanded": true,
+              "value": "Fixes\r\n\r\nTBD: Remove space after ) where next letter is a vowel",
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "greedy": false,
+                  "dotMatchesNewLines": true,
+                  "utf8support": true
+                }
+              }
+            }
+          }
+        },
+        "Comment": {
+          "value": "Tidy 2",
+          "SubFilters": {
+            "Simple": {
+              "filterType": 11
+            },
+            "Simple": {
+              "filterType": 19
+            }
+          }
+        },
+        "Comment": {
+          "value": "Acrostics\r\n\r\nMove the 22 acrostics in Ps 118 to before the verse & mark with \\qa \r\n& removed the redundant space and colon.\r\n\r\nReplace the italics markers in Lamentations by \\qac_...\\qac*\r\n\r\nNB. Has to be done after Tidy 2 else HETH is not matched.\r\n\r\nSWORD currently doesn't allocate a character style to the\r\ncorresponding OSIS defined <hi type=\"acrostic\">...<\/hi>\r\n\r\n",
+          "SubFilters": {
+            "String": {
+              "expanded": true,
+              "value": "^.+Ps.xml$",
+              "matchCase": false,
+              "filterType": 17,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "onlyLogOnReplace": true,
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "greedy": true,
+                  "dotMatchesNewLines": false,
+                  "utf8support": true,
+                  "items": [
+                    ["(\\\\v \\d+ .+)(ALEPH) :\\x20", "\\\\qa $2\\r\\n\\\\p\\r\\n$1"],
+                    ["(\\\\v \\d+ )([A-Z]+) :\\x20", "\\\\qa $2\\r\\n\\\\p\\r\\n$1"]
+                  ]
+                }
+              }
+            },
+            "String": {
+              "expanded": true,
+              "value": "^.+Lam.xml$",
+              "matchCase": false,
+              "filterType": 17,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "onlyLogOnReplace": true,
+                  "ignoreCase": false,
+                  "patternType": 0,
+                  "greedy": false,
+                  "dotMatchesNewLines": true,
+                  "utf8support": true,
+                  "items": [
+                    ["\\it", "\\qac"]
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Output": {
+      "retainDateTime": false,
+      "outputToFile": 1,
+      "changeExtension": true,
+      "newExtension": ".usfm",
+      "changeBaseDir": true,
+      "newBaseDir": "V:\\USFM",
+      "maintainStructure": false,
+      "singleFilename": "%USERPROFILE%\\mergefilename.txt",
+      "append": false,
+      "onlyOutputChangedFiles": 1,
+      "ignoreStartFolder": false,
+      "isPrimary": true
+    }
+  }
+}

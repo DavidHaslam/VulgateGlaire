@@ -1,0 +1,190 @@
+﻿{
+  "formatName": "TextPipe_FLL",
+  "formatVersion": "1.0",
+  "trialInput": "You can type sample text in \r\nthe Trial Run Input Area to\r\ntest if your filter is working \r\nproperly. Click the [Trial Run]\r\nbutton below to start the test.\r\n\r\nYou can also perform Partial Trial \r\nRuns by right-clicking on filters\r\nin the Filter list.\r\n\r\nTo clear this text, just right \r\nclick it and select 'Clear Entire \r\nField' from the menu. Most \r\nof TextPipe's fields have \r\nsimilar helpful menus.\r\n",
+  "Logging": {
+    "expanded": true,
+    "enabled": false,
+    "filename": ".\\textpipe.log",
+    "append": false,
+    "threshold": 5000,
+    "commentFilters": true
+  },
+  "Files": [
+    {
+      "filename": "V:\\USFM\\*.usfm",
+      "subfolder": "None",
+      "action": "Include"
+    }
+  ],
+  "Filters": {
+    "Input": {
+      "binaryFiles": 0,
+      "inputFromFiles": 1,
+      "insideCompressed": false
+    },
+    "Comment": {
+      "value": "Add filename as header to USFM files\r\n First remove existing ID.\r\n Then change to USFM \\id TAG\r\n\r\n\r\n\r\n",
+      "SubFilters": {
+        "Columns": {
+          "filterType": 6,
+          "value": "1",
+          "moveTo": 1,
+          "processIndividually": false,
+          "excludeDelimiter": false,
+          "excludeQuotes": false,
+          "delimiter": 0,
+          "customDelimiter": ",",
+          "customQualifier": "\"",
+          "hasHeader": false
+        },
+        "String": {
+          "value": "\\\\id @inputFilename\r\n\\ide UTF-8\r\n\\\\rem French Vulgate Glaire\r\n\\\\h @inputFilename\r\n\\\\toc1 @inputFilename\r\n\\\\toc2 @inputFilename\r\n\\\\mt1 @inputFilename\r\n",
+          "matchCase": false,
+          "filterType": 19
+        },
+        "Columns": {
+          "expanded": true,
+          "filterType": 1,
+          "value": "1..7",
+          "moveTo": 1,
+          "processIndividually": false,
+          "excludeDelimiter": false,
+          "excludeQuotes": false,
+          "delimiter": 0,
+          "customDelimiter": ",",
+          "customQualifier": "\"",
+          "hasHeader": false,
+          "SubFilters": {
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "ignoreCase": false,
+              "patternType": 1,
+              "greedy": true,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "items": [
+                ["\\d+_(...)_VG.usfm", "$1"]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Comment": {
+      "value": "Replace names in header markers\r\n\r\n \\mt1  French bookname\r\n \\h    French bookname\r\n \\toc1 French bookname\r\n \\toc2 French bookname (short)\r\n\r\nTBD:\r\n \\toc3 French abbreviation (with period where applicable)",
+      "SubFilters": {
+        "Grep": {
+          "expanded": true,
+          "filterType": 0,
+          "value": "\\\\(mt1|toc1)",
+          "ignoreCase": false,
+          "patternType": 0,
+          "utf8support": true,
+          "ignoreEmpty": false,
+          "SubFilters": {
+            "SearchList": {
+              "useFile": true,
+              "filename": "V:\\Lists\\French_booknames.tab",
+              "simultaneous": false,
+              "onlyLogOnReplace": true,
+              "ignoreCase": false,
+              "wholeWord": true,
+              "patternType": 1,
+              "greedy": false,
+              "dotMatchesNewLines": true,
+              "utf8support": true
+            }
+          }
+        },
+        "Grep": {
+          "expanded": true,
+          "filterType": 0,
+          "value": "\\\\(h|toc2)",
+          "ignoreCase": false,
+          "patternType": 0,
+          "utf8support": true,
+          "ignoreEmpty": false,
+          "SubFilters": {
+            "SearchList": {
+              "useFile": true,
+              "filename": "V:\\Lists\\French_short_booknames.tab",
+              "simultaneous": false,
+              "onlyLogOnReplace": true,
+              "ignoreCase": false,
+              "wholeWord": true,
+              "patternType": 1,
+              "greedy": false,
+              "dotMatchesNewLines": true,
+              "utf8support": true
+            }
+          }
+        },
+        "Grep": {
+          "expanded": true,
+          "filterType": 0,
+          "value": "\\\\(toc3)",
+          "ignoreCase": false,
+          "patternType": 0,
+          "utf8support": true,
+          "ignoreEmpty": false,
+          "SubFilters": {
+            "SearchList": {
+              "useFile": true,
+              "filename": "V:\\Lists\\Vulgate_abbreviations.tab",
+              "simultaneous": false,
+              "onlyLogOnReplace": true,
+              "ignoreCase": false,
+              "wholeWord": true,
+              "patternType": 1,
+              "greedy": false,
+              "dotMatchesNewLines": true,
+              "utf8support": true
+            }
+          }
+        }
+      }
+    },
+    "Comment": {
+      "value": "Add chapter label for Psalms\r\n \\cl Psaume\r\n\r\nCauses issues with osis2mod\r\n",
+      "enabled": false,
+      "SubFilters": {
+        "String": {
+          "expanded": true,
+          "value": "^.+PSA.+$",
+          "matchCase": false,
+          "filterType": 17,
+          "SubFilters": {
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "onlyLogOnReplace": true,
+              "ignoreCase": false,
+              "patternType": 1,
+              "greedy": false,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "items": [
+                ["(\\\\mt1 \\w+\\r\\n)", "$1\\\\cl Psaume\\r\\n"]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Output": {
+      "retainDateTime": false,
+      "outputToFile": 1,
+      "changeExtension": false,
+      "newExtension": ".txt",
+      "changeBaseDir": false,
+      "newBaseDir": "C:\\",
+      "singleFilename": "%USERPROFILE%\\mergefilename.txt",
+      "append": false,
+      "onlyOutputChangedFiles": 1,
+      "ignoreStartFolder": false,
+      "isPrimary": true
+    }
+  }
+}

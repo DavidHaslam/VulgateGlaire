@@ -1,0 +1,339 @@
+﻿{
+  "formatName": "TextPipe_FLL",
+  "formatVersion": "1.0",
+  "trialInput": "You can type sample text in \r\nthe Trial Run Input Area to\r\ntest if your filter is working \r\nproperly. Click the [Trial Run]\r\nbutton below to start the test.\r\n\r\nYou can also perform Partial Trial \r\nRuns by right-clicking on filters\r\nin the Filter list.\r\n\r\nTo clear this text, just right \r\nclick it and select 'Clear Entire \r\nField' from the menu. Most \r\nof TextPipe's fields have \r\nsimilar helpful menus.\r\n",
+  "Logging": {
+    "expanded": true,
+    "enabled": true,
+    "filename": ".\\textpipe.log",
+    "append": false,
+    "threshold": 5000,
+    "commentFilters": true
+  },
+  "Files": [
+    {
+      "filename": "S:\\Import\\VulgateGlaire.osis.xml",
+      "subfolder": "None",
+      "action": "Include"
+    }
+  ],
+  "Filters": {
+    "Input": {
+      "binaryFiles": 0,
+      "inputFromFiles": 1,
+      "insideCompressed": false
+    },
+    "Comment": {
+      "expanded": true,
+      "value": "Enclose parenthesised text items with OSIS XML variant markup\r\n\r\nRefer to: https:\/\/crosswire.org\/wiki\/OSIS_Bibles#Marking_variants\r\n\r\nWrap using <seg type=\"x-variant\" subType=\"x-2\">(...)<\/seg>\r\n\r\nPurpose: To make the primary readings (variant 1) more readable, \r\nsome spaces were also moved to within the seg element.\r\n\r\nNB. Excludes the 21 outer parentheses of the 24 nested pairs.\r\nAlso restrict to each line in turn to preserve those that span lines.\r\n\r\nTBD:\r\n + Exclude the parenthesised items that are not secondary readings.\r\n + Adjust some further spaces that should\/should not be moved.\r\n\r\n",
+      "SubFilters": {
+        "Comment": {
+          "value": "Revision History:\r\n\r\n2017-10-10 Filter developed and used successfully\r\n2021-01-18 Filter saved in new JSON readable text format"
+        },
+        "Comment": {
+          "value": "Initial tidy\r\n\r\n - Remove blank lines\r\n - Replace 4 spaces by tabs, these were artefacts of u2o2.py\r\n - Add indents missing for most description elements",
+          "SubFilters": {
+            "Simple": {
+              "filterType": 10
+            },
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "ignoreCase": false,
+              "patternType": 1,
+              "greedy": false,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "items": [
+                ["(    )", "\\t"],
+                ["^(<description )", "\\t\\t\\t\\t$1"]
+              ]
+            }
+          }
+        },
+        "Comment": {
+          "value": "Textual changes\r\n\r\n - Remove the note mentions\r\n - Remove the 'garder Judas...' note\r\n - Remove leftover Hebrew Psalm number\r\n\r\nCorrections: (* now done in USFM )\r\n - Insert space before colon in 1Cor.15.35\r\n * Insert space in Ps.114.1 before \"J’aime \"\r\n * Extend italics markup in Ps.55.1\r\n \r\nTBD:\r\n * Move 'Pour la fin.' to Ps.55.1 & Ps.56.1\r\n * Insert comma after 'Alleluia' in Ps.111.1\r\n + Remove 'Alleluia. ' from Ps.118.1 ?\r\n + Add OSIS foreign element to acrostics in Lamentations\r\n + Join Ps.22.7 to Ps.22.6 (done in TEI, not yet USFM)\r\n",
+          "SubFilters": {
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "ignoreCase": false,
+              "patternType": 1,
+              "greedy": false,
+              "dotMatchesNewLines": true,
+              "utf8support": true,
+              "items": [
+                [" \\(note\\)", ""],
+                [", note\\)", ")"],
+                ["; note\\)", ")"],
+                ["> note\\)", ">)"],
+                [" \\(H\\x{00E9}breu : 33\\)\\.", ""],
+                ["\\(garder Judas, il y a une note dessus\\)\\x20", ""],
+                ["(dira):", "$1 :"],
+                ["(<\/hi>)(J)", "$1 $2"]
+              ]
+            },
+            "Grep": {
+              "filterType": 0,
+              "value": "\"Ps.55.1\"",
+              "ignoreCase": false,
+              "patternType": 0,
+              "utf8support": true,
+              "ignoreEmpty": false,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "onlyLogOnReplace": true,
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "greedy": false,
+                  "dotMatchesNewLines": false,
+                  "utf8support": true,
+                  "items": [
+                    ["(<\/hi>)( titre, .+ Geth.)", "$2$$1"]
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Comment": {
+          "value": "Temporary replacements\r\n\r\n - Join consecutive parenthesised items\r\n - Replace italics markup by grave accent & low line\r\n\r\n",
+          "SubFilters": {
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "ignoreCase": false,
+              "patternType": 0,
+              "greedy": false,
+              "dotMatchesNewLines": true,
+              "utf8support": true,
+              "items": [
+                [") (", "##"],
+                ["<hi type=\"italic\">", "`"],
+                ["<\/hi>", "_"]
+              ]
+            }
+          }
+        },
+        "Comment": {
+          "value": "Fix the unmatched italicised parentheses",
+          "SubFilters": {
+            "Grep": {
+              "expanded": true,
+              "filterType": 0,
+              "value": "\\QsID=\"Ps.\\E(99|100|137|144)\\Q.1\"\\E",
+              "ignoreCase": false,
+              "patternType": 0,
+              "utf8support": true,
+              "ignoreEmpty": false,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "onlyLogOnReplace": true,
+                  "ignoreCase": false,
+                  "patternType": 0,
+                  "greedy": false,
+                  "dotMatchesNewLines": true,
+                  "utf8support": true,
+                  "items": [
+                    [")._", "._)"]
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Comment": {
+          "value": "Split italicised text containing parentheses\r\n\r\nAvoids XML syntax error!: \r\n Invalid to have a seg element within a hi element.\r\n Solution was to split the hi element into 3 parts.\r\n Instead of: <hi .+>.+<seg .+>(.+)<\/seg>.+<\/hi>\r\n Use: <hi .+>.+<\/hi><seg .+>(<hi .+>.+<\/hi>)<\/seg><hi .+>.+<\/hi>\r\n\r\n Basically, avoid italicised parentheses in the source text.\r\n At least while adding the markup for variants.\r\n They don't look so good anyway!\r\n Yet if French orthography permits, they can be restored.\r\n \r\n\r\n",
+          "SubFilters": {
+            "Search": {
+              "expanded": true,
+              "search": "`(.+)_",
+              "replace": "",
+              "ignoreCase": false,
+              "patternType": 1,
+              "replaceType": 4,
+              "greedy": false,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "onlyLogOnReplace": true,
+                  "ignoreCase": false,
+                  "patternType": 0,
+                  "greedy": false,
+                  "dotMatchesNewLines": false,
+                  "utf8support": true,
+                  "items": [
+                    ["(", "_(`"],
+                    [")", "_)`"]
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Comment": {
+          "value": "Remove empty italics markup _`",
+          "SubFilters": {
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "onlyLogOnReplace": true,
+              "ignoreCase": false,
+              "patternType": 0,
+              "greedy": false,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "items": [
+                ["`_", ""]
+              ]
+            }
+          }
+        },
+        "Comment": {
+          "value": "Add seg elements to support OSIS variants\r\n\r\nTBD:\r\n - Exclude parenthesised text that was so in VulgClementine\r\n\r\n\r\n",
+          "SubFilters": {
+            "Simple": {
+              "expanded": true,
+              "filterType": 49,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "greedy": false,
+                  "dotMatchesNewLines": false,
+                  "utf8support": true,
+                  "items": [
+                    ["(\\([^\\(\\)]+\\))", "<seg type=\"x-variant\" subType=\"x-2\">$1<\/seg>"]
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Comment": {
+          "value": "Move spaces into seg element\r\n\r\n1. Restrict to single seg element plus up to 2 characters either side\r\n\r\nMove leading & trailing space:\r\n - if the leading space was preceded by a right single quotation mark\r\n\r\nMove leading space:\r\n - if seg element was followed by a comma or period\r\n - if seg element was followed by ] or )\r\n\r\nMove trailing space:\r\n - if seg element was also preceded by a space\r\n - if seg element was at the start of the verse\r\n - if seg element was preceded by a right single quotation mark\r\n\r\n2. Restrict to similar pattern with replaced italics markup\r\n\r\nMove leading space\r\n - if seg element was followed by a comma or period\r\n",
+          "SubFilters": {
+            "Search": {
+              "expanded": true,
+              "search": "(.|..)<seg type=\"x-variant\" subType=\"x-2\">\\x20?\\([^\\(\\)]+\\)\\x20?<\/seg>(.|..)",
+              "replace": "",
+              "ignoreCase": false,
+              "patternType": 1,
+              "replaceType": 2,
+              "greedy": false,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "greedy": false,
+                  "dotMatchesNewLines": false,
+                  "utf8support": true,
+                  "items": [
+                    ["(\\x{2019})( )(<seg .+>)(.+)(<\/seg>)( )", "$1$$3$$2$$4$$6$$5"],
+                    ["( )(<seg .+>)(.+<\/seg>[,\\.])", "$2$$1$$3"],
+                    ["( )(<seg .+>)(.+<\/seg>[\\]\\)])", "$2$$1$$3"],
+                    ["( <seg .+>.+)(<\/seg>)( )", "$1$$3$$2"],
+                    ["(\/><seg .+>.+)(<\/seg>)( )", "$1$$3$$2"],
+                    ["(\\x{2019}<seg .+>.+)(<\/seg>)( )", "$1$$3$$2"]
+                  ]
+                }
+              }
+            },
+            "Search": {
+              "expanded": true,
+              "search": "(._)<seg type=\"x-variant\" subType=\"x-2\">\\x20?\\([^\\(\\)]+\\)\\x20?<\/seg>(`.)",
+              "replace": "",
+              "ignoreCase": false,
+              "patternType": 1,
+              "replaceType": 2,
+              "greedy": false,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "SubFilters": {
+                "SearchList": {
+                  "useFile": false,
+                  "simultaneous": false,
+                  "ignoreCase": false,
+                  "patternType": 1,
+                  "greedy": false,
+                  "dotMatchesNewLines": false,
+                  "utf8support": true,
+                  "items": [
+                    ["( )(_<seg .+>)(.+<\/seg>`[,\\.])", "$2$$1$$3"]
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Comment": {
+          "value": "Move parentheses to within italics markup\r\n\r\nDisable this if French orthography permits italicised parentheses.\r\n\r\n - 92 matched pairs (`.+_) replaced by `($1)_\r\n -  1 replace(s) performed for exact match [(`] in Ps.55.1\r\n -  1 replace(s) performed for exact match [)`] in Ps.55.1\r\n \r\nA better solution is required for Ps.55.1 being the one place\r\nwhere even the outer parentheses should be in the seg element.\r\n\r\nThese should remain as normal parentheses, so deleted from replace list\r\n + 4 replace(s) performed for exact match [_)]\r\n   These are in v1 of Ps.99,100,137,144.\r\nLocations of unmatched italicised parentheses in the earlier sub-filter!\r\n\r\n",
+          "SubFilters": {
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "onlyLogOnReplace": true,
+              "ignoreCase": false,
+              "patternType": 1,
+              "greedy": false,
+              "dotMatchesNewLines": false,
+              "utf8support": true,
+              "items": [
+                ["\\(`(.+)_\\)", "`($1)_"],
+                ["\\(`", "`("],
+                ["\\)`", "`)"]
+              ]
+            }
+          }
+        },
+        "Comment": {
+          "value": "Undo the replacements\r\n\r\n",
+          "SubFilters": {
+            "SearchList": {
+              "useFile": false,
+              "simultaneous": false,
+              "onlyLogOnReplace": true,
+              "ignoreCase": false,
+              "patternType": 0,
+              "greedy": false,
+              "dotMatchesNewLines": true,
+              "utf8support": true,
+              "items": [
+                ["##", ") ("],
+                ["`", "<hi type=\"italic\">"],
+                ["_", "<\/hi>"]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Output": {
+      "retainDateTime": false,
+      "outputToFile": 1,
+      "changeExtension": true,
+      "newExtension": ".variant@inputExtension",
+      "changeBaseDir": false,
+      "newBaseDir": "C:\\",
+      "singleFilename": "%USERPROFILE%\\mergefilename.txt",
+      "append": false,
+      "onlyOutputChangedFiles": 1,
+      "openOutputOnCompletion": true,
+      "ignoreStartFolder": false,
+      "isPrimary": true
+    }
+  }
+}

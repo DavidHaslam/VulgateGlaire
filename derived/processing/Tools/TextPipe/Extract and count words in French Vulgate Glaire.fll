@@ -1,0 +1,109 @@
+﻿{
+  "formatName": "TextPipe_FLL",
+  "formatVersion": "1.0",
+  "trialInput": "You can type sample text in \r\nthe Trial Run Input Area to\r\ntest if your filter is working \r\nproperly. Click the [Trial Run]\r\nbutton below to start the test.\r\n\r\nYou can also perform Partial Trial \r\nRuns by right-clicking on filters\r\nin the Filter list.\r\n\r\nTo clear this text, just right \r\nclick it and select 'Clear Entire \r\nField' from the menu. Most \r\nof TextPipe's fields have \r\nsimilar helpful menus.\r\n",
+  "Logging": {
+    "expanded": true,
+    "enabled": true,
+    "filename": ".\\textpipe.log",
+    "append": false,
+    "threshold": 5000,
+    "commentFilters": true
+  },
+  "Files": [
+    {
+      "filename": "D:\\Download\\Java\\GoBibleCreator\\Download Other\\GitHub\\MarjorieBurghart\\VulgateGlaire\\merged.usfm",
+      "subfolder": "None",
+      "action": "Include"
+    }
+  ],
+  "Filters": {
+    "Input": {
+      "binaryFiles": 0,
+      "inputFromFiles": 1,
+      "insideCompressed": false
+    },
+    "Comment": {
+      "expanded": true,
+      "value": "Extract and count words in French Vulgate Glaire\r\n\r\nAnalysis is restricted to verse text minus USFM tags.\r\n\r\n - Hyphen-minus within a word is temporarily replaced by the hyphen U+2010\r\n - This permits the simple replacement of [[:punct:]] by a space.\r\n - No-break spaces are also replaced.",
+      "SubFilters": {
+        "EOL": {
+          "convertFrom": 3,
+          "convertTo": 0,
+          "fixedLineLength": 80,
+          "removeExtraneous": false,
+          "convertToText": ""
+        },
+        "Grep": {
+          "expanded": true,
+          "filterType": 1,
+          "value": "^\\\\v",
+          "ignoreCase": false,
+          "patternType": 0,
+          "utf8support": true,
+          "ignoreEmpty": false,
+          "SubFilters": {
+            "Simple": {
+              "filterType": 48
+            }
+          }
+        },
+        "SearchList": {
+          "useFile": false,
+          "simultaneous": false,
+          "onlyLogOnReplace": true,
+          "ignoreCase": false,
+          "patternType": 1,
+          "greedy": true,
+          "dotMatchesNewLines": false,
+          "utf8support": true,
+          "items": [
+            ["\\\\v \\d+ ", ""],
+            ["\\\\[a-z]+( |\\*)", ""],
+            ["(\\w+)\\x2D(\\w+)", "$1\\xE2\\x80\\x90$2"]
+          ]
+        },
+        "SearchList": {
+          "useFile": false,
+          "simultaneous": false,
+          "onlyLogOnReplace": true,
+          "ignoreCase": false,
+          "patternType": 1,
+          "greedy": true,
+          "dotMatchesNewLines": false,
+          "utf8support": true,
+          "items": [
+            ["[[:punct:]\\xA0]", "\\x20"],
+            ["\\x20", "\\n"],
+            ["\\x{2010}", "\\x2D"]
+          ]
+        },
+        "Simple": {
+          "filterType": 10
+        },
+        "Duplicate": {
+          "filterType": 1,
+          "ignoreCase": false,
+          "startColumn": 1,
+          "ColLength": 40,
+          "includeOne": true,
+          "formatResults": "%5.5d\\t%s"
+        }
+      }
+    },
+    "Output": {
+      "retainDateTime": false,
+      "outputToFile": 1,
+      "changeExtension": true,
+      "newExtension": ".words.count.txt",
+      "changeBaseDir": false,
+      "newBaseDir": "C:\\",
+      "singleFilename": "%USERPROFILE%\\mergefilename.txt",
+      "append": false,
+      "onlyOutputChangedFiles": 1,
+      "openOutputOnCompletion": true,
+      "ignoreStartFolder": false,
+      "isPrimary": true
+    }
+  }
+}
