@@ -26,5 +26,6 @@ This folder contains my **TextPipe** filters and other tools used during text de
 1. I have resaved the TextPipe filters in the new *human readable* **JSON** text file format.
 2. Input and output paths for these TextPipe filters were not updated when I copied these into the GitHub project.
 3. The Windows **subst** command is used *ad hoc* to create virtual drive letters on my PC as and when the need arises. It's a neat way to shorten long file paths.
-4.  As indicated in the *module*.conf file, the text development was not quite completed in October 2017. There are still a few tasks **TBD**. 
+4. As indicated in the *module*.conf file, the text development was not quite completed in October 2017. There are still a few tasks **TBD**. 
+5. Paths to external replace lists may need to be tweaked for some of the TextPipe filters.
 
