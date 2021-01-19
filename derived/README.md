@@ -1,5 +1,5 @@
 # Vulgate Glaire - derived folders
-* David Haslam (text/module developer) - 18 January 2021
+* David Haslam (text/module developer) - 19 January 2021
 ## USFM
 This folder contains 73 **USFM** files converted from TEI XML.
 * These were systematically renamed using a simple *ad hoc* Windows CMD file.
