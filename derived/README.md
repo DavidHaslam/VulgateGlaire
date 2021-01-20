@@ -1,5 +1,5 @@
 # Vulgate Glaire - derived folders
-* David Haslam (text/module developer) - 19 January 2021
+* David Haslam (text/module developer) - 20 January 2021
 ## USFM
 This folder contains 73 **USFM** files converted from TEI XML by means of a bespoke TextPipe filter.
 * These were systematically renamed using a simple *ad hoc* Windows CMD file.
@@ -11,6 +11,12 @@ This folder contains two **OSIS** XML files:
 This folder contains **SWORD** module **FreVulgGlaire**
 * This was made from the OSIS input file using the **osis2mod** tool from the [CrossWire Bible Society](https://crosswire.org/).
 * It was initially created in October 2017 for testing by the developer.
+### mods.d
+This folder contains the module configuration file which can be viewed with a text editor.
+### modules
+This folder contains the structured module data and also includes its Lucene search index.
+### Zip
+This folder contains an archived copy of the SWORD module ready for download.
 ## processing
 This folder contains folders used in analysis and conversion
 ### Analysis
